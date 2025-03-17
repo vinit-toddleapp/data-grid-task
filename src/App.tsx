@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import {
   DataEditor,
   GridSelection,
@@ -24,10 +24,10 @@ export interface DataItem {
 const data = dataGenerator(["name", "email", "phone", "company"], 2000);
 
 const columns: GridColumn[] = [
-  { title: "Name", id: "name" },
-  { title: "Company", id: "company" },
-  { title: "Email", id: "email" },
-  { title: "Phone", id: "phone" },
+  { title: "Name", id: "name", icon: "nameIcon" },
+  { title: "Email", id: "email", icon: "emailIcon" },
+  { title: "Phone", id: "phone", icon: "phoneIcon" },
+  { title: "Company", id: "company", icon: "companyIcon" },
 ];
 
 function App() {
@@ -104,6 +104,31 @@ function App() {
     ctx.restore();
   }, []);
 
+  const headerIcons = useMemo(() => {
+    return {
+      nameIcon: (p) =>
+        `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="10" cy="10" r="8" fill="${p.bgColor}" />
+        <text x="10" y="14" text-anchor="middle" fill="${p.fgColor}" font-size="12" font-weight="bold">N</text>
+      </svg>`,
+      emailIcon: (p) =>
+        `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="5" width="14" height="10" fill="${p.bgColor}" />
+        <path d="M3 5l7 5l7-5" stroke="${p.fgColor}" stroke-width="2"/>
+      </svg>`,
+      phoneIcon: (p) =>
+        `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="3" width="10" height="14" fill="${p.bgColor}" />
+        <circle cx="10" cy="15" r="1" fill="${p.fgColor}" />
+      </svg>`,
+      companyIcon: (p) =>
+        `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="6" width="12" height="8" fill="${p.bgColor}" />
+        <rect x="6" y="2" width="8" height="4" fill="${p.fgColor}" />
+      </svg>`,
+    };
+  }, []);
+
   return (
     <>
       <h1>Glide Data Grid</h1>
@@ -140,7 +165,7 @@ function App() {
           freezeTrailingRows={2}
           drawHeader={drawHeader}
           drawCell={drawCell}
-          // headerIcons:
+          headerIcons={headerIcons}
         />
       </div>
     </>
