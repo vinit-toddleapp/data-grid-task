@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@glideapps/glide-data-grid": "^6.0.3",
+    "dependency": "^0.0.1",
     "lodash": "^4.17.21",
     "marked": "^4.0.10",
     "react": "^17.0.2",
@@ -29,5 +30,8 @@
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.6.1"
   }
 }
