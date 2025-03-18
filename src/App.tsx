@@ -34,7 +34,6 @@ const columns: GridColumn[] = [
 function App() {
   const [showSearch, setShowSearch] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
   const [selection, setSelection] = useState<GridSelection>({
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
@@ -145,7 +144,7 @@ function App() {
           getCellContent={getCellContent}
           onCellEdited={onCellEdited}
           columns={columns}
-          rows={searchResults.length || data.length}
+          rows={searchValue.length === 0 ? data.length : searchValue.length}
           width={600}
           height={500}
           rowMarkers={"number"}
@@ -160,17 +159,12 @@ function App() {
           gridSelection={selection}
           onGridSelectionChange={setSelection}
           //For search
+          searchValue={searchValue}
+          onSearchValueChange={setSearchValue}
           showSearch={showSearch}
-          // searchValue={searchValue}
-          // onSearchValueChange={setSearchValue}
-          // searchResults={searchResults}
-          // onSearchResultsChanged={(results, navInd) => {
-          //   console.log("Results: ", results);
-          //   setSearchResults([...results]);
-          // }}
+          searchResults={[]}
           onSearchClose={() => {
             setShowSearch(false);
-            setSearchResults([]);
             setSearchValue("");
           }}
           //Custom stuff
