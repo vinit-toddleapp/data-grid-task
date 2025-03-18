@@ -13,6 +13,7 @@ import {
 } from "@glideapps/glide-data-grid";
 import "@glideapps/glide-data-grid/dist/index.css";
 import { dataGenerator } from "./utils/data-generator";
+// import { AllCellRenderers } from "./cells/index";
 
 export interface DataItem {
   name: string;
@@ -21,7 +22,7 @@ export interface DataItem {
   phone: string;
 }
 
-const data = dataGenerator(["name", "email", "phone", "company"], 2000);
+const data = dataGenerator(["name", "email", "phone", "company"], 500);
 
 const columns: GridColumn[] = [
   { title: "Name", id: "name", icon: "nameIcon" },
@@ -33,11 +34,13 @@ const columns: GridColumn[] = [
 function App() {
   const [showSearch, setShowSearch] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [selection, setSelection] = useState<GridSelection>({
     columns: CompactSelection.empty(),
     rows: CompactSelection.empty(),
   });
 
+  // listens for key+f for search
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.code === "KeyF") {
@@ -50,7 +53,7 @@ function App() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []); // listens for key+f for search
+  }, []);
 
   const getCellContent = useCallback((cell: Item): GridCell => {
     const [col, row] = cell;
@@ -106,22 +109,22 @@ function App() {
 
   const headerIcons = useMemo(() => {
     return {
-      nameIcon: (p) =>
+      nameIcon: (p: { fgColor: string; bgColor: string }) =>
         `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="10" cy="10" r="8" fill="${p.bgColor}" />
         <text x="10" y="14" text-anchor="middle" fill="${p.fgColor}" font-size="12" font-weight="bold">N</text>
       </svg>`,
-      emailIcon: (p) =>
+      emailIcon: (p: { fgColor: string; bgColor: string }) =>
         `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="3" y="5" width="14" height="10" fill="${p.bgColor}" />
         <path d="M3 5l7 5l7-5" stroke="${p.fgColor}" stroke-width="2"/>
       </svg>`,
-      phoneIcon: (p) =>
+      phoneIcon: (p: { fgColor: string; bgColor: string }) =>
         `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="5" y="3" width="10" height="14" fill="${p.bgColor}" />
         <circle cx="10" cy="15" r="1" fill="${p.fgColor}" />
       </svg>`,
-      companyIcon: (p) =>
+      companyIcon: (p: { fgColor: string; bgColor: string }) =>
         `<svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="4" y="6" width="12" height="8" fill="${p.bgColor}" />
         <rect x="6" y="2" width="8" height="4" fill="${p.fgColor}" />
@@ -141,31 +144,41 @@ function App() {
         <DataEditor
           getCellContent={getCellContent}
           onCellEdited={onCellEdited}
-          gridSelection={selection}
-          onGridSelectionChange={setSelection}
           columns={columns}
-          rows={2000}
+          rows={searchResults.length || data.length}
           width={600}
           height={500}
+          rowMarkers={"number"}
+          rowHeight={40}
           smoothScrollX={true}
           smoothScrollY={true}
           fixedShadowY={true}
           fixedShadowX={false}
-          searchResults={[]}
           getCellsForSelection={true}
-          onSearchValueChange={setSearchValue}
-          searchValue={searchValue}
+          freezeColumns={2}
+          freezeTrailingRows={1}
+          gridSelection={selection}
+          onGridSelectionChange={setSelection}
+          //For search
           showSearch={showSearch}
-          rowMarkers={"number"}
+          // searchValue={searchValue}
+          // onSearchValueChange={setSearchValue}
+          // searchResults={searchResults}
+          // onSearchResultsChanged={(results, navInd) => {
+          //   console.log("Results: ", results);
+          //   setSearchResults([...results]);
+          // }}
           onSearchClose={() => {
             setShowSearch(false);
+            setSearchResults([]);
             setSearchValue("");
           }}
-          freezeColumns={2}
-          freezeTrailingRows={2}
+          //Custom stuff
           drawHeader={drawHeader}
           drawCell={drawCell}
           headerIcons={headerIcons}
+          headerHeight={40}
+          // customRenderers={AllCellRenderers}
         />
       </div>
     </>
