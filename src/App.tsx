@@ -60,6 +60,25 @@ function App() {
     const keys: (keyof DataItem)[] = ["name", "company", "email", "phone"];
     const value = dataRow ? dataRow[keys[col]] : "";
 
+    if (row === 0 && (col === 2 || col === 3)) {
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: false,
+        data: "Merged Columns 2 & 3",
+        span: [2, 3],
+        displayData: "Merged Columns 2 & 3",
+      };
+    }
+
+    if (row == 1 && col == 0)
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: true,
+        readonly: true,
+        displayData: "",
+        data: "",
+      };
+
     return {
       kind: GridCellKind.Text,
       allowOverlay: true,
@@ -159,14 +178,15 @@ function App() {
           gridSelection={selection}
           onGridSelectionChange={setSelection}
           //For search
-          searchValue={searchValue}
-          onSearchValueChange={setSearchValue}
-          showSearch={showSearch}
-          searchResults={[]}
-          onSearchClose={() => {
-            setShowSearch(false);
-            setSearchValue("");
-          }}
+          keybindings={{ search: true }}
+          // searchValue={searchValue}
+          // onSearchValueChange={setSearchValue}
+          // showSearch={showSearch}
+          // searchResults={[]}
+          // onSearchClose={() => {
+          //   setShowSearch(false);
+          //   setSearchValue("");
+          // }}
           //Custom stuff
           drawHeader={drawHeader}
           drawCell={drawCell}
