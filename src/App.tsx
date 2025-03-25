@@ -10,8 +10,8 @@ import {
   Item,
   DrawHeaderCallback,
   DrawCellCallback,
-} from "@glideapps/glide-data-grid";
-import "@glideapps/glide-data-grid/dist/index.css";
+} from "../glide-data-grid/packages/core";
+import "../glide-data-grid/packages/core/dist/index.css";
 import { dataGenerator } from "./utils/data-generator";
 // import { AllCellRenderers } from "./cells/index";
 
@@ -70,14 +70,15 @@ function App() {
       };
     }
 
-    if (row == 1 && col == 0)
+    if (col === 0 && row >= 2 && row <= 4) {
       return {
         kind: GridCellKind.Text,
-        allowOverlay: true,
-        readonly: true,
-        displayData: "",
-        data: "",
+        allowOverlay: false,
+        data: "Row Span span",
+        rowSpan: [2, 4],
+        displayData: "Row span",
       };
+    }
 
     return {
       kind: GridCellKind.Text,

@@ -1,5 +1,5 @@
 {
-  "name": "glide-data-grid",
+  "name": "glide-sandbox",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@glideapps/glide-data-grid": "^6.0.3",
     "dependency": "^0.0.1",
     "lodash": "^4.17.21",
     "marked": "^4.0.10",
